@@ -1,1 +1,1 @@
-"# buffalo-cow" 
+#buffalo-cow
