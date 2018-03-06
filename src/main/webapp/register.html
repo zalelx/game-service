@@ -3,9 +3,14 @@
     <title>Registration page</title>
 </head>
 <body>
-<form action="register_process">
-    <input type="text" title="login">
-    <input type="password" title="password">
+<form action="/register.do" method="post">
+    <label>
+        <input type="text" name="username">
+    </label><br/>
+    <label>
+        <input type="password" name="password">
+    </label><br/>
+    <input type="submit" /><br/>
 </form>
 
 </body>

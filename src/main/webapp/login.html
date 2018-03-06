@@ -3,9 +3,14 @@
     <title>Login page</title>
 </head>
 <body>
-<form action="j_security_check" method="post">
-    <input type="text" title="j_username">
-    <input type="password" title="j_password">
+<form action="/login.do" method="post"><br/>
+    <label>
+        <input type="text" name="username">
+    </label><br/>
+    <label>
+        <input type="password" name="password">
+    </label><br/>
+    <input type="submit"/>
 </form>
 
 </body>
