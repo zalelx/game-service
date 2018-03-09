@@ -1,36 +1,34 @@
 package my.buffalocow.listener;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import javax.servlet.http.HttpSessionAttributeListener;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
-import javax.servlet.http.HttpSessionBindingEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import javax.sql.DataSource;
+import java.sql.*;
 
 @WebListener
 public class DatabaseConnectionListener implements ServletContextListener {
     private Connection connection;
 
     public void contextInitialized(ServletContextEvent sce) {
-        try {
-            Class.forName("org.sqlite.JDBC");
-            this.connection = DriverManager.getConnection("jdbc:sqlite:TEST.db");
+//            Class.forName("org.sqlite.JDBC");
 
-            Statement statement = connection.createStatement();
-            statement.execute("CREATE TABLE IF NOT EXISTS 'users' ('id' INTEGER PRIMARY KEY AUTOINCREMENT, 'name' TEXT, 'phone' INT);");
+        Connection conn = null;
+        try {
+            Context initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+            DataSource ds = (DataSource) envCtx.lookup("jdbc/sqlite");
+            conn = ds.getConnection();
+            Statement statement = conn.createStatement();
+            statement.execute("CREATE TABLE IF NOT EXISTS 'users' " +
+                    "('id' INTEGER PRIMARY KEY AUTOINCREMENT, 'name' TEXT, 'password' TEXT);");
 
             sce.getServletContext().setAttribute("statement", statement);
 
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | NamingException e) {
             e.printStackTrace();
         }
     }
